@@ -28,8 +28,11 @@ export class ActivityLink extends Entity {
   })
   activityId: number;
 
-  @hasMany(() => Course)
-  courseId: Course;
+  @property({
+    type: 'number',
+  })
+  courseId?: number;
+
   constructor(data?: Partial<ActivityLink>) {
     super(data);
   }

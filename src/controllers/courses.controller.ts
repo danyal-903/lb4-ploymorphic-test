@@ -68,19 +68,19 @@ export class CoursesController {
     },
   })
   async find(@param.filter(Course) filter?: Filter<Course>): Promise<Course[]> {
-    try {
-      return this.courseRepository.find({
-        include: [
-          {
-            relation: 'ActivityLink',
-            scope: {include: [{relation: 'Activity'}]},
-          },
-        ],
-      });
-    } catch (err) {
-      throw err;
-    }
-    // return this.courseRepository.find(filter);
+    // try {
+    //   return this.courseRepository.find({
+    //     include: [
+    //       {
+    //         relation: 'ActivityLink',
+    //         scope: {include: [{relation: 'Activity'}]},
+    //       },
+    //     ],
+    //   });
+    // } catch (err) {
+    //   throw err;
+    // }
+    return this.courseRepository.find(filter);
   }
 
   @patch('/courses')

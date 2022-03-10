@@ -22,10 +22,13 @@ export class Course extends Entity {
       model: () => ActivityLink,
       keyFrom: 'modelId',
       keyTo: 'activityId',
-      polymorphic: {discriminator: 'modelType'},
+      //polymorphic: {discriminator: 'modelType'},
     },
   })
   activities: Activity[];
+
+  @hasMany(() => ActivityLink)
+  activityLinks: ActivityLink[];
 
   constructor(data?: Partial<Course>) {
     super(data);
