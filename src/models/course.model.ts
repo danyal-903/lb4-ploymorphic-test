@@ -2,9 +2,7 @@ import {Entity, hasMany, model, property} from '@loopback/repository';
 import {ActivityLink} from './activity-link.model';
 import {Activity} from './activity.model';
 
-@model({
-  settings: {strict: true, postgresql: {schema: 'public', table: 'course'}},
-})
+@model()
 export class Course extends Entity {
   @property({
     type: 'number',
