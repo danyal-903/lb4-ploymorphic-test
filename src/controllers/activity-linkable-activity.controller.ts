@@ -5,7 +5,7 @@ import {
   repository,
   Where,
 } from '@loopback/repository';
-import {
+  import {
   del,
   get,
   getModelSchemaRef,
@@ -15,18 +15,22 @@ import {
   post,
   requestBody,
 } from '@loopback/rest';
-import {Activity, Course} from '../models';
-import {CourseRepository} from '../repositories';
+import {
+ActivityLinkable,
+ActivityLinks,
+Activity,
+} from '../models';
+import {ActivityLinkableRepository} from '../repositories';
 
-export class CourseActivityController {
+export class ActivityLinkableActivityController {
   constructor(
-    @repository(CourseRepository) protected courseRepository: CourseRepository,
-  ) {}
+    @repository(ActivityLinkableRepository) protected activityLinkableRepository: ActivityLinkableRepository,
+  ) { }
 
-  @get('/courses/{id}/activities', {
+  @get('/activity-linkables/{id}/activities', {
     responses: {
       '200': {
-        description: 'Array of Course has many Activity through ActivityLinks',
+        description: 'Array of ActivityLinkable has many Activity through ActivityLinks',
         content: {
           'application/json': {
             schema: {type: 'array', items: getModelSchemaRef(Activity)},
@@ -39,10 +43,10 @@ export class CourseActivityController {
     @param.path.number('id') id: number,
     @param.query.object('filter') filter?: Filter<Activity>,
   ): Promise<Activity[]> {
-    return this.courseRepository.activities(id).find(filter);
+    return this.activityLinkableRepository.activities(id).find(filter);
   }
 
-  @post('/courses/{id}/activities', {
+  @post('/activity-linkables/{id}/activities', {
     responses: {
       '200': {
         description: 'create a Activity model instance',
@@ -51,29 +55,25 @@ export class CourseActivityController {
     },
   })
   async create(
-    @param.path.number('id') id: typeof Course.prototype.id,
+    @param.path.number('id') id: typeof ActivityLinkable.prototype.id,
     @requestBody({
       content: {
         'application/json': {
           schema: getModelSchemaRef(Activity, {
-            title: 'NewActivityInCourse',
+            title: 'NewActivityInActivityLinkable',
             exclude: ['id'],
           }),
         },
       },
-    })
-    activity: Omit<Activity, 'id'>,
+    }) activity: Omit<Activity, 'id'>,
   ): Promise<Activity> {
-    return this.courseRepository.activities(id).create(activity, {
-      // polymorphicType: 'Course',
-      throughData: {modelId: id, modelType: 'Course', courseId: id},
-    });
+    return this.activityLinkableRepository.activities(id).create(activity);
   }
 
-  @patch('/courses/{id}/activities', {
+  @patch('/activity-linkables/{id}/activities', {
     responses: {
       '200': {
-        description: 'Course.Activity PATCH success count',
+        description: 'ActivityLinkable.Activity PATCH success count',
         content: {'application/json': {schema: CountSchema}},
       },
     },
@@ -88,25 +88,23 @@ export class CourseActivityController {
       },
     })
     activity: Partial<Activity>,
-    @param.query.object('where', getWhereSchemaFor(Activity))
-    where?: Where<Activity>,
+    @param.query.object('where', getWhereSchemaFor(Activity)) where?: Where<Activity>,
   ): Promise<Count> {
-    return this.courseRepository.activities(id).patch(activity, where);
+    return this.activityLinkableRepository.activities(id).patch(activity, where);
   }
 
-  @del('/courses/{id}/activities', {
+  @del('/activity-linkables/{id}/activities', {
     responses: {
       '200': {
-        description: 'Course.Activity DELETE success count',
+        description: 'ActivityLinkable.Activity DELETE success count',
         content: {'application/json': {schema: CountSchema}},
       },
     },
   })
   async delete(
     @param.path.number('id') id: number,
-    @param.query.object('where', getWhereSchemaFor(Activity))
-    where?: Where<Activity>,
+    @param.query.object('where', getWhereSchemaFor(Activity)) where?: Where<Activity>,
   ): Promise<Count> {
-    return this.courseRepository.activities(id).delete(where);
+    return this.activityLinkableRepository.activities(id).delete(where);
   }
 }

@@ -20,7 +20,7 @@ import {
 import {Course} from '../models';
 import {CourseRepository} from '../repositories';
 
-export class CoursesController {
+export class CourseController {
   constructor(
     @repository(CourseRepository)
     public courseRepository: CourseRepository,
@@ -37,11 +37,12 @@ export class CoursesController {
         'application/json': {
           schema: getModelSchemaRef(Course, {
             title: 'NewCourse',
+            exclude: ['id'],
           }),
         },
       },
     })
-    course: Course,
+    course: Omit<Course, 'id'>,
   ): Promise<Course> {
     return this.courseRepository.create(course);
   }
@@ -68,18 +69,6 @@ export class CoursesController {
     },
   })
   async find(@param.filter(Course) filter?: Filter<Course>): Promise<Course[]> {
-    // try {
-    //   return this.courseRepository.find({
-    //     include: [
-    //       {
-    //         relation: 'ActivityLink',
-    //         scope: {include: [{relation: 'Activity'}]},
-    //       },
-    //     ],
-    //   });
-    // } catch (err) {
-    //   throw err;
-    // }
     return this.courseRepository.find(filter);
   }
 

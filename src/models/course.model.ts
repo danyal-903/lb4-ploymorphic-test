@@ -1,9 +1,10 @@
-import {Entity, hasMany, model, property} from '@loopback/repository';
-import {ActivityLink} from './activity-link.model';
+import {hasMany, model, property, RelationType} from '@loopback/repository';
+import {ActivityLinkable} from './activity-linkable.model';
+import {ActivityLinks} from './activity-links.model';
 import {Activity} from './activity.model';
 
 @model()
-export class Course extends Entity {
+export class Course extends ActivityLinkable {
   @property({
     type: 'number',
     id: true,
@@ -15,20 +16,23 @@ export class Course extends Entity {
     type: 'string',
     required: true,
   })
-  title: string;
+  name: string;
 
-  @hasMany(() => Activity, {
-    through: {
-      model: () => ActivityLink,
-      keyFrom: 'modelId',
-      keyTo: 'activityId',
-      //polymorphic: {discriminator: 'modelType'},
-    },
-  })
-  activities: Activity[];
+  @hasMany(() => ActivityLinks)
+  activityLinks: ActivityLinks[];
 
-  @hasMany(() => ActivityLink)
-  activityLinks: ActivityLink[];
+  // @hasMany(() => Activity, {
+  //   source: Course,
+  //   targetsMany: true,
+  //   type: RelationType.hasMany,
+  //   through: {
+  //     model: () => ActivityLinks,
+  //     keyFrom: 'modelId',
+  //     keyTo: 'activityId',
+  //     polymorphic: {discriminator: 'modelType'},
+  //   },
+  // })
+  // activities: Activity[];
 
   constructor(data?: Partial<Course>) {
     super(data);

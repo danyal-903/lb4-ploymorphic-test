@@ -17,11 +17,11 @@ import {
 } from '@loopback/rest';
 import {
   Course,
-  ActivityLink,
+  ActivityLinks,
 } from '../models';
 import {CourseRepository} from '../repositories';
 
-export class CourseActivityLinkController {
+export class CourseActivityLinksController {
   constructor(
     @repository(CourseRepository) protected courseRepository: CourseRepository,
   ) { }
@@ -29,10 +29,10 @@ export class CourseActivityLinkController {
   @get('/courses/{id}/activity-links', {
     responses: {
       '200': {
-        description: 'Array of Course has many ActivityLink',
+        description: 'Array of Course has many ActivityLinks',
         content: {
           'application/json': {
-            schema: {type: 'array', items: getModelSchemaRef(ActivityLink)},
+            schema: {type: 'array', items: getModelSchemaRef(ActivityLinks)},
           },
         },
       },
@@ -40,8 +40,8 @@ export class CourseActivityLinkController {
   })
   async find(
     @param.path.number('id') id: number,
-    @param.query.object('filter') filter?: Filter<ActivityLink>,
-  ): Promise<ActivityLink[]> {
+    @param.query.object('filter') filter?: Filter<ActivityLinks>,
+  ): Promise<ActivityLinks[]> {
     return this.courseRepository.activityLinks(id).find(filter);
   }
 
@@ -49,7 +49,7 @@ export class CourseActivityLinkController {
     responses: {
       '200': {
         description: 'Course model instance',
-        content: {'application/json': {schema: getModelSchemaRef(ActivityLink)}},
+        content: {'application/json': {schema: getModelSchemaRef(ActivityLinks)}},
       },
     },
   })
@@ -58,22 +58,22 @@ export class CourseActivityLinkController {
     @requestBody({
       content: {
         'application/json': {
-          schema: getModelSchemaRef(ActivityLink, {
-            title: 'NewActivityLinkInCourse',
+          schema: getModelSchemaRef(ActivityLinks, {
+            title: 'NewActivityLinksInCourse',
             exclude: ['id'],
             optional: ['courseId']
           }),
         },
       },
-    }) activityLink: Omit<ActivityLink, 'id'>,
-  ): Promise<ActivityLink> {
-    return this.courseRepository.activityLinks(id).create(activityLink);
+    }) activityLinks: Omit<ActivityLinks, 'id'>,
+  ): Promise<ActivityLinks> {
+    return this.courseRepository.activityLinks(id).create(activityLinks);
   }
 
   @patch('/courses/{id}/activity-links', {
     responses: {
       '200': {
-        description: 'Course.ActivityLink PATCH success count',
+        description: 'Course.ActivityLinks PATCH success count',
         content: {'application/json': {schema: CountSchema}},
       },
     },
@@ -83,27 +83,27 @@ export class CourseActivityLinkController {
     @requestBody({
       content: {
         'application/json': {
-          schema: getModelSchemaRef(ActivityLink, {partial: true}),
+          schema: getModelSchemaRef(ActivityLinks, {partial: true}),
         },
       },
     })
-    activityLink: Partial<ActivityLink>,
-    @param.query.object('where', getWhereSchemaFor(ActivityLink)) where?: Where<ActivityLink>,
+    activityLinks: Partial<ActivityLinks>,
+    @param.query.object('where', getWhereSchemaFor(ActivityLinks)) where?: Where<ActivityLinks>,
   ): Promise<Count> {
-    return this.courseRepository.activityLinks(id).patch(activityLink, where);
+    return this.courseRepository.activityLinks(id).patch(activityLinks, where);
   }
 
   @del('/courses/{id}/activity-links', {
     responses: {
       '200': {
-        description: 'Course.ActivityLink DELETE success count',
+        description: 'Course.ActivityLinks DELETE success count',
         content: {'application/json': {schema: CountSchema}},
       },
     },
   })
   async delete(
     @param.path.number('id') id: number,
-    @param.query.object('where', getWhereSchemaFor(ActivityLink)) where?: Where<ActivityLink>,
+    @param.query.object('where', getWhereSchemaFor(ActivityLinks)) where?: Where<ActivityLinks>,
   ): Promise<Count> {
     return this.courseRepository.activityLinks(id).delete(where);
   }

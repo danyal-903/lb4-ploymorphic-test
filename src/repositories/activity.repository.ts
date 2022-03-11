@@ -8,7 +8,9 @@ export class ActivityRepository extends DefaultCrudRepository<
   typeof Activity.prototype.id,
   ActivityRelations
 > {
-  constructor(@inject('datasources.db') dataSource: DbDataSource) {
+  constructor(
+    @inject('datasources.db') dataSource: DbDataSource,
+  ) {
     super(Activity, dataSource);
   }
 }

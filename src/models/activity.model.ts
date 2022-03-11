@@ -11,14 +11,9 @@ export class Activity extends Entity {
 
   @property({
     type: 'string',
-  })
-  details?: string;
-
-  @property({
-    type: 'string',
     required: true,
   })
-  value: string;
+  info: string;
 
   constructor(data?: Partial<Activity>) {
     super(data);
